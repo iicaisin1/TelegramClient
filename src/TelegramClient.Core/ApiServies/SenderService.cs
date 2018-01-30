@@ -40,11 +40,9 @@
 
         private async Task<object> SendAndRecieve(IObject methodToExecute)
         {
-            var sendTask = await Sender.Send(methodToExecute).ConfigureAwait(false);
-            var recieveTask = ResponseResultGetter.Receive(sendTask.Item2);
-
+            var sendTask = await Sender.Send(methodToExecute).ConfigureAwait(false); 
             await sendTask.Item1.ConfigureAwait(false);
-            return await recieveTask.ConfigureAwait(false); 
+            return await ResponseResultGetter.Receive(sendTask.Item2).ConfigureAwait(false); 
         }
     }
 }

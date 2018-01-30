@@ -26,9 +26,12 @@
 
             token.Register(() =>
             {
-                Log.Error($"Message response result timed out for messageid '{requestId}'");
-                _resultCallbacks.TryRemove(requestId, out var ignored);
-                tcs.TrySetCanceled(token);
+                if (!tcs.Task.IsCompleted)
+                {
+                    Log.Warn($"Message response result timed out for messageid '{requestId}'");
+                    _resultCallbacks.TryRemove(requestId, out var ignored);
+                    tcs.TrySetCanceled(token);
+                }
             });
 
             _resultCallbacks[requestId] = tcs;
